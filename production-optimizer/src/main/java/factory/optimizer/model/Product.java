@@ -19,7 +19,7 @@ public class Product {
 
     private String name;
 
-    private Double value;
+    private Double productValue;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private List<ProductComposition> compositions;

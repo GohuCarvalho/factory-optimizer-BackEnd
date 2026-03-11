@@ -8,6 +8,6 @@ public class RawProductResponseDto {
     private Long id;
     private String code;
     private String name;
-    private Double value;
+    private Double productValue;
 
 }

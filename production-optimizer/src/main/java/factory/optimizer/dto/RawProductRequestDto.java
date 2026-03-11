@@ -7,6 +7,6 @@ public class RawProductRequestDto {
 
     private String code;
     private String name;
-    private Double value;
+    private Double productValue;
 
 }

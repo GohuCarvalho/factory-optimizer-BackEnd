@@ -40,7 +40,7 @@ public class ProductService {
 
         product.setCode(dto.getCode());
         product.setName(dto.getName());
-        product.setValue(dto.getValue());
+        product.setProductValue(dto.getProductValue());
 
         return toResponseDto(repository.save(product));
     }
@@ -52,7 +52,7 @@ public class ProductService {
 
         product.setCode(dto.getCode());
         product.setName(dto.getName());
-        product.setValue(dto.getValue());
+        product.setProductValue(dto.getProductValue());
 
         return toResponseDto(repository.save(product));
     }
@@ -68,7 +68,7 @@ public class ProductService {
         dto.setId(product.getId());
         dto.setCode(product.getCode());
         dto.setName(product.getName());
-        dto.setValue(product.getValue());
+        dto.setProductValue(product.getProductValue());
 
         return dto;
     }
