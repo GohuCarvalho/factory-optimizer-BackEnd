@@ -1,7 +1,7 @@
 package factory.optimizer.controller;
 
 import factory.optimizer.dto.ProductionPlanResponseDto;
-import factory.optimizer.service.ProductionService;
+import factory.optimizer.service.ProductionPlanService;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +11,9 @@ import java.util.List;
 @RequestMapping("/production-plan")
 public class ProductionController {
 
-    private final ProductionService productionService;
+    private final ProductionPlanService productionService;
 
-    public ProductionController(ProductionService productionService) {
+    public ProductionController(ProductionPlanService productionService) {
         this.productionService = productionService;
     }
 

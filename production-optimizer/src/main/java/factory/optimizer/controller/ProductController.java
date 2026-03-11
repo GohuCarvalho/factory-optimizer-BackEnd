@@ -1,8 +1,9 @@
 package factory.optimizer.controller;
 
-import factory.optimizer.dto.RawProductRequestDto;
-import factory.optimizer.dto.RawProductResponseDto;
+import factory.optimizer.dto.ProductRequestDto;
+import factory.optimizer.dto.ProductResponseDto;
 import factory.optimizer.service.ProductService;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -19,23 +20,23 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<RawProductResponseDto> findAll() {
+    public List<ProductResponseDto> findAll() {
         return service.findAll();
     }
 
     @GetMapping("/{id}")
-    public RawProductResponseDto findById(@PathVariable Long id) {
+    public ProductResponseDto findById(@PathVariable Long id) {
         return service.findById(id);
     }
 
     @PostMapping
-    public RawProductResponseDto create(@RequestBody RawProductRequestDto dto) {
+    public ProductResponseDto create(@Valid @RequestBody ProductRequestDto dto) {
         return service.create(dto);
     }
 
     @PutMapping("/{id}")
-    public RawProductResponseDto update(@PathVariable Long id,
-            @RequestBody RawProductRequestDto dto) {
+    public ProductResponseDto update(@PathVariable Long id,
+            @RequestBody ProductRequestDto dto) {
         return service.update(id, dto);
     }
 

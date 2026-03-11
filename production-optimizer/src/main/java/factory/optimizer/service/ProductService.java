@@ -1,9 +1,9 @@
 package factory.optimizer.service;
 
-import factory.optimizer.dto.RawProductRequestDto;
-import factory.optimizer.dto.RawProductResponseDto;
+import factory.optimizer.dto.ProductRequestDto;
+import factory.optimizer.dto.ProductResponseDto;
 import factory.optimizer.model.Product;
-import factory.optimizer.repository.RawProductRepository;
+import factory.optimizer.repository.ProductRepository;
 
 import org.springframework.stereotype.Service;
 
@@ -13,20 +13,20 @@ import java.util.stream.Collectors;
 @Service
 public class ProductService {
 
-    private final RawProductRepository repository;
+    private final ProductRepository repository;
 
-    public ProductService(RawProductRepository repository) {
+    public ProductService(ProductRepository repository) {
         this.repository = repository;
     }
 
-    public List<RawProductResponseDto> findAll() {
+    public List<ProductResponseDto> findAll() {
         return repository.findAll()
                 .stream()
                 .map(this::toResponseDto)
                 .collect(Collectors.toList());
     }
 
-    public RawProductResponseDto findById(Long id) {
+    public ProductResponseDto findById(Long id) {
 
         Product product = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -34,7 +34,7 @@ public class ProductService {
         return toResponseDto(product);
     }
 
-    public RawProductResponseDto create(RawProductRequestDto dto) {
+    public ProductResponseDto create(ProductRequestDto dto) {
 
         Product product = new Product();
 
@@ -45,7 +45,7 @@ public class ProductService {
         return toResponseDto(repository.save(product));
     }
 
-    public RawProductResponseDto update(Long id, RawProductRequestDto dto) {
+    public ProductResponseDto update(Long id, ProductRequestDto dto) {
 
         Product product = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -61,9 +61,9 @@ public class ProductService {
         repository.deleteById(id);
     }
 
-    private RawProductResponseDto toResponseDto(Product product) {
+    private ProductResponseDto toResponseDto(Product product) {
 
-        RawProductResponseDto dto = new RawProductResponseDto();
+        ProductResponseDto dto = new ProductResponseDto();
 
         dto.setId(product.getId());
         dto.setCode(product.getCode());

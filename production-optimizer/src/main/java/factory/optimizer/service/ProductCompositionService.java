@@ -1,12 +1,12 @@
 package factory.optimizer.service;
 
-import factory.optimizer.dto.RawProductCompositionRequestDto;
-import factory.optimizer.dto.RawProductCompositionResponseDto;
+import factory.optimizer.dto.ProductCompositionRequestDto;
+import factory.optimizer.dto.ProductCompositionResponseDto;
 import factory.optimizer.model.Product;
 import factory.optimizer.model.ProductComposition;
 import factory.optimizer.model.RawMaterial;
-import factory.optimizer.repository.RawProductCompositionRepository;
-import factory.optimizer.repository.RawProductRepository;
+import factory.optimizer.repository.ProductCompositionRepository;
+import factory.optimizer.repository.ProductRepository;
 import factory.optimizer.repository.RawMaterialRepository;
 
 import org.springframework.stereotype.Service;
@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 @Service
 public class ProductCompositionService {
 
-    private final RawProductCompositionRepository compositionRepository;
-    private final RawProductRepository productRepository;
+    private final ProductCompositionRepository compositionRepository;
+    private final ProductRepository productRepository;
     private final RawMaterialRepository rawMaterialRepository;
 
-    public ProductCompositionService(RawProductCompositionRepository compositionRepository,
-            RawProductRepository productRepository,
+    public ProductCompositionService(ProductCompositionRepository compositionRepository,
+            ProductRepository productRepository,
             RawMaterialRepository rawMaterialRepository) {
 
         this.compositionRepository = compositionRepository;
@@ -30,7 +30,7 @@ public class ProductCompositionService {
         this.rawMaterialRepository = rawMaterialRepository;
     }
 
-    public List<RawProductCompositionResponseDto> findAll() {
+    public List<ProductCompositionResponseDto> findAll() {
 
         return compositionRepository.findAll()
                 .stream()
@@ -38,7 +38,7 @@ public class ProductCompositionService {
                 .collect(Collectors.toList());
     }
 
-    public RawProductCompositionResponseDto create(RawProductCompositionRequestDto dto) {
+    public ProductCompositionResponseDto create(ProductCompositionRequestDto dto) {
 
         Product product = productRepository.findById(dto.getProductId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -59,9 +59,9 @@ public class ProductCompositionService {
         compositionRepository.deleteById(id);
     }
 
-    private RawProductCompositionResponseDto toResponseDto(ProductComposition composition) {
+    private ProductCompositionResponseDto toResponseDto(ProductComposition composition) {
 
-        RawProductCompositionResponseDto dto = new RawProductCompositionResponseDto();
+        ProductCompositionResponseDto dto = new ProductCompositionResponseDto();
 
         dto.setId(composition.getId());
         dto.setQuantityRequired(composition.getQuantityRequired());

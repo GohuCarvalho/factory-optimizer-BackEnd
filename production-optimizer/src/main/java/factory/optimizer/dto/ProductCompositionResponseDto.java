@@ -3,7 +3,7 @@ package factory.optimizer.dto;
 import lombok.Data;
 
 @Data
-public class RawProductCompositionResponseDto {
+public class ProductCompositionResponseDto {
 
     private Long id;
     private Double quantityRequired;

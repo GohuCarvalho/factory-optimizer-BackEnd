@@ -1,8 +1,9 @@
 package factory.optimizer.controller;
 
-import factory.optimizer.dto.RawProductCompositionRequestDto;
-import factory.optimizer.dto.RawProductCompositionResponseDto;
+import factory.optimizer.dto.ProductCompositionRequestDto;
+import factory.optimizer.dto.ProductCompositionResponseDto;
 import factory.optimizer.service.ProductCompositionService;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -19,13 +20,13 @@ public class ProductCompositionController {
     }
 
     @GetMapping
-    public List<RawProductCompositionResponseDto> findAll() {
+    public List<ProductCompositionResponseDto> findAll() {
         return service.findAll();
     }
 
     @PostMapping
-    public RawProductCompositionResponseDto create(
-            @RequestBody RawProductCompositionRequestDto dto) {
+    public ProductCompositionResponseDto create(
+            @Valid @RequestBody ProductCompositionRequestDto dto) {
 
         return service.create(dto);
     }

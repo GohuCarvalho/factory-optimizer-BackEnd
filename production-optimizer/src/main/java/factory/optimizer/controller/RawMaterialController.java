@@ -3,6 +3,7 @@ package factory.optimizer.controller;
 import factory.optimizer.dto.RawMaterialRequestDto;
 import factory.optimizer.dto.RawMaterialResponseDto;
 import factory.optimizer.service.RawMaterialService;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class RawMaterialController {
     }
 
     @PostMapping
-    public RawMaterialResponseDto create(@RequestBody RawMaterialRequestDto dto) {
+    public RawMaterialResponseDto create(@Valid @RequestBody RawMaterialRequestDto dto) {
         return service.create(dto);
     }
 
