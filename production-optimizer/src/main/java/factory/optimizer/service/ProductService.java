@@ -8,6 +8,7 @@ import factory.optimizer.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +39,7 @@ public class ProductService {
 
         Product product = new Product();
 
-        product.setCode(dto.getCode());
+        product.setCode("PROD-" + UUID.randomUUID().toString().substring(0, 8));
         product.setName(dto.getName());
         product.setProductValue(dto.getProductValue());
 

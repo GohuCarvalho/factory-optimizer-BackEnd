@@ -8,6 +8,7 @@ import factory.optimizer.repository.RawMaterialRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +39,7 @@ public class RawMaterialService {
 
         RawMaterial material = new RawMaterial();
 
-        material.setCode(dto.getCode());
+        material.setCode("MAT-" + UUID.randomUUID().toString().substring(0, 8));
         material.setName(dto.getName());
         material.setStockQuantity(dto.getStockQuantity());
 
