@@ -7,15 +7,18 @@ import factory.optimizer.model.RawMaterial;
 import factory.optimizer.repository.ProductRepository;
 import factory.optimizer.repository.RawMaterialRepository;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 class ProductionPlanServiceTest {
 
@@ -28,100 +31,89 @@ class ProductionPlanServiceTest {
     @InjectMocks
     private ProductionPlanService productionPlanService;
 
-    public ProductionPlanServiceTest() {
+    @BeforeEach
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
+    @DisplayName("Should generate production plan for a single product correctly based on stock")
     void shouldGenerateProductionPlanCorrectly() {
+        RawMaterial steel = createRawMaterial(1L, "Steel", 1000.0);
 
-        // ===== GIVEN =====
+        Product premium = createProduct(1L, "Premium Bottle", 100.0, steel, 400.0);
 
-        RawMaterial steel = new RawMaterial();
-        steel.setId(1L);
-        steel.setName("Steel");
-        steel.setStockQuantity(1000.0);
-
-        Product premium = new Product();
-        premium.setId(1L);
-        premium.setName("Premium Bottle");
-        premium.setProductValue(100.0);
-
-        ProductComposition comp = new ProductComposition();
-        comp.setProduct(premium);
-        comp.setRawMaterial(steel);
-        comp.setQuantityRequired(400.0);
-
-        premium.setCompositions(List.of(comp));
-
-        // simulando retorno do banco
         when(productRepository.findAll()).thenReturn(List.of(premium));
-        when(rawMaterialRepository.findAll()).thenReturn(List.of(steel));
-
-        // ===== WHEN =====
-
-        var result = productionPlanService.generatePlan();
-
-        // ===== THEN =====
-
-        assertEquals(1, result.size());
-
-        assertEquals("Premium Bottle", result.get(0).getProductName());
-
-        assertEquals(2, result.get(0).getQuantityToProduce());
-
-        assertEquals(200.0, result.get(0).getTotalValue());
-    }
-
-    @Test
-    void shouldPrioritizeMoreValuableProducts() {
-
-        RawMaterial steel = new RawMaterial();
-        steel.setId(1L);
-        steel.setStockQuantity(1000.0);
-
-        Product premium = new Product();
-        premium.setId(1L);
-        premium.setName("Premium Bottle");
-        premium.setProductValue(100.0);
-
-        Product standard = new Product();
-        standard.setId(2L);
-        standard.setName("Standard Bottle");
-        standard.setProductValue(70.0);
-
-        Product cup = new Product();
-        cup.setId(3L);
-        cup.setName("Small Cup");
-        cup.setProductValue(20.0);
-
-        ProductComposition compPremium = new ProductComposition();
-        compPremium.setProduct(premium);
-        compPremium.setRawMaterial(steel);
-        compPremium.setQuantityRequired(400.0);
-
-        ProductComposition compStandard = new ProductComposition();
-        compStandard.setProduct(standard);
-        compStandard.setRawMaterial(steel);
-        compStandard.setQuantityRequired(250.0);
-
-        ProductComposition compCup = new ProductComposition();
-        compCup.setProduct(cup);
-        compCup.setRawMaterial(steel);
-        compCup.setQuantityRequired(100.0);
-
-        premium.setCompositions(List.of(compPremium));
-        standard.setCompositions(List.of(compStandard));
-        cup.setCompositions(List.of(compCup));
-
-        when(productRepository.findAll()).thenReturn(
-                new ArrayList<>(List.of(premium, standard, cup)));
-
         when(rawMaterialRepository.findAll()).thenReturn(List.of(steel));
 
         List<ProductionPlanResponseDto> result = productionPlanService.generatePlan();
 
         assertFalse(result.isEmpty());
+        assertEquals("Premium Bottle", result.get(0).getProductName());
+        assertEquals(2, result.get(0).getQuantityToProduce());
+        assertEquals(200.0, result.get(0).getTotalValue());
     }
 
+    @Test
+    @DisplayName("Should prioritize high-value products and fill remaining capacity with cheaper ones")
+    void shouldPrioritizeMoreValuableProductsAndUseResidualStock() {
+
+        RawMaterial steel = createRawMaterial(1L, "Steel", 1000.0);
+
+        Product premium = createProduct(1L, "Premium Bottle", 100.0, steel, 400.0);
+
+        Product standard = createProduct(2L, "Standard Bottle", 70.0, steel, 250.0);
+
+        Product cup = createProduct(3L, "Small Cup", 20.0, steel, 100.0);
+
+        when(productRepository.findAll()).thenReturn(new ArrayList<>(List.of(standard, premium, cup)));
+        when(rawMaterialRepository.findAll()).thenReturn(List.of(steel));
+
+        List<ProductionPlanResponseDto> result = productionPlanService.generatePlan();
+
+        ProductionPlanResponseDto premiumRes = findInResult(result, "Premium Bottle");
+        ProductionPlanResponseDto standardRes = findInResult(result, "Standard Bottle");
+        ProductionPlanResponseDto cupRes = findInResult(result, "Small Cup");
+
+        assertEquals(2, premiumRes.getQuantityToProduce(), "Should maximize the most valuable product first");
+
+        assertTrue(standardRes == null || standardRes.getQuantityToProduce() == 0,
+                "Should not produce Standard if remaining material is insufficient");
+
+        assertNotNull(cupRes);
+        assertEquals(2, cupRes.getQuantityToProduce(), "Should use residual stock for next possible product");
+
+        double totalValue = result.stream().mapToDouble(ProductionPlanResponseDto::getTotalValue).sum();
+        assertEquals(240.0, totalValue);
+    }
+
+    private RawMaterial createRawMaterial(Long id, String name, Double stock) {
+        RawMaterial rm = new RawMaterial();
+        rm.setId(id);
+        rm.setName(name);
+        rm.setStockQuantity(stock);
+        return rm;
+    }
+
+    private Product createProduct(Long id, String name, Double value, RawMaterial mat, Double qtyRequired) {
+        Product p = new Product();
+        p.setId(id);
+        p.setName(name);
+        p.setProductValue(value);
+
+        ProductComposition comp = new ProductComposition();
+        comp.setProduct(p);
+        comp.setRawMaterial(mat);
+        comp.setQuantityRequired(qtyRequired);
+
+        p.setCompositions(List.of(comp));
+        return p;
+    }
+
+    private ProductionPlanResponseDto findInResult(List<ProductionPlanResponseDto> result, String name) {
+        return result.stream()
+                .filter(r -> r.getProductName().equals(name))
+                .findFirst()
+                .orElse(null);
+    }
 }
