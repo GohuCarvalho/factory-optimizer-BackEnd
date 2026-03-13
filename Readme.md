@@ -38,6 +38,20 @@ O projeto segue o padrão de camadas para garantir a separação de responsabili
 * [x] Documentação interativa com Swagger.
 * [x] Testes unitários de lógica de negócio.
 
+## 🧪 Testes Unitários
+
+A suíte de testes foi rigorosamente implementada para garantir a precisão do cálculo de produção. 
+
+**Cenários validados:**
+* ✅ Cálculo básico de produção por limite de estoque.
+* ✅ Priorização de produtos mais valiosos.
+* ✅ Resolução de conflitos de matéria-prima (Pular produtos inviáveis e buscar o próximo possível).
+* ✅ Integridade do valor total calculado.
+
+* Para rodar os testes, utilize:
+
+./mvnw test
+
 ---
 
 ## 🚀 Como executar o projeto
@@ -75,10 +89,6 @@ GET /production-plan
   }
 ]
 
-🧪 Testes
-O projeto utiliza JUnit 5 e Mockito para garantir a integridade da lógica de planejamento. Para rodar os testes, utilize:
-
-./mvnw test
 
 👤 Autor
 Desenvolvido por Hugo Avelino de Carvalho.
