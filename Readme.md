@@ -1,230 +1,84 @@
-### **# Factory Optimizer API**
+# 🏭 Factory Optimizer API
 
+> API REST desenvolvida em **Spring Boot** para gerenciamento de matérias-primas e otimização da produção industrial.
 
+O sistema calcula automaticamente quais produtos devem ser produzidos para **maximizar o valor total da produção**, considerando as restrições de estoque de matéria-prima.
 
-API REST desenvolvida em \*\*Spring Boot\*\* para gerenciamento de matérias-primas e otimização da produção industrial.
+---
 
+## 🛠 Tecnologias utilizadas
 
+* **Java 17+**
+* **Spring Boot 3**
+* **Spring Data JPA**
+* **Maven**
+* **Swagger (OpenAPI)**
+* **JUnit 5 & Mockito**
+* **H2 Database** (ou Banco de dados relacional)
 
-O sistema calcula automaticamente quais produtos devem ser produzidos para \*\*maximizar o valor total da produção\*\*, considerando as restrições de estoque de matéria-prima.
+---
 
+## 🏗 Arquitetura do projeto
 
+O projeto segue o padrão de camadas para garantir a separação de responsabilidades:
 
-\---
+`Controller` → `Service` → `Repository` → `Database`
 
+**Estrutura de pacotes:**
+`Controller` | `Service` | `Repository` | `Model` | `Dto` | `Exception`
 
+---
 
-#### **# Tecnologias utilizadas**
+## ✅ Funcionalidades
 
+* [x] Cadastro de produtos e matérias-primas.
+* [x] Definição de composição técnica de produtos.
+* [x] **Cálculo de plano de produção otimizado.**
+* [x] Validação de dados e tratamento global de exceções.
+* [x] Documentação interativa com Swagger.
+* [x] Testes unitários de lógica de negócio.
 
+---
 
-\- Java 17+
+## 🚀 Como executar o projeto
 
-\- Spring Boot
+1. **Clone o repositório:**
+   ```bash
+   git clone [https://github.com/HUGO-AVELINO/factory-optimizer-BackEnd.git](https://github.com/HUGO-AVELINO/factory-optimizer-BackEnd.git)
 
-\- Spring Data JPA
+2. Entre na pasta:
+    cd factory-optimizer-BackEnd
 
-\- Maven
+3.  Execute a aplicação:
+     ./mvnw spring-boot:run
+ A API estará disponível em: http://localhost:8080
 
-\- Swagger (OpenAPI)
+📖 Documentação da API
 
-\- JUnit 5
+Com a aplicação rodando, acesse o Swagger para visualizar e testar os endpoints:
 
-\- Mockito
+🔗 http://localhost:8080/swagger-ui.html
 
-\- Jakarta Validation
-
-\- H2 / Banco de dados relacional
-
-
-
-\---
-
-
-
-#### **# Arquitetura do projeto**
-
-
-
-###### **O projeto segue o padrão em camadas:**
-
-
-
-Controller → Service → Repository → Database
-
-
-
-
-
-###### **Estrutura principal:**
-
-
-
-Controller |Service |Repository | Model | Dto |Exception
-
-
-
-
-
-\---
-
-
-
-#### **# Funcionalidades**
-
-
-
-✔ Cadastro de produtos  
-
-✔ Cadastro de matérias-primas  
-
-✔ Definição de composição de produtos  
-
-✔ Cálculo de plano de produção otimizado  
-
-✔ Validação de dados de entrada  
-
-✔ Tratamento global de exceções  
-
-✔ Documentação da API com Swagger  
-
-✔ Testes unitários com JUnit e Mockito  
-
-
-
-\---
-
-
-
-#### **# Endpoint principal**
-
-
-
-#### **## Gerar plano de produção**
-
-
-
+Exemplo de Resposta (Plano de Produção)
 GET /production-plan
 
-
-
-
-
-###### **Exemplo de resposta:**
-
-
-
-```json
-
-\[
-
-&#x20; {
-
-&#x20;   "productName": "Premium Bottle",
-
-&#x20;   "quantityToProduce": 2,
-
-&#x20;   "totalValue": 200.0
-
-&#x20; },
-
-&#x20; {
-
-&#x20;   "productName": "Small Cup",
-
-&#x20;   "quantityToProduce": 2,
-
-&#x20;   "totalValue": 40.0
-
-&#x20; }
-
+[
+  {
+    "productName": "Premium Bottle",
+    "quantityToProduce": 2,
+    "totalValue": 200.0
+  },
+  {
+    "productName": "Small Cup",
+    "quantityToProduce": 2,
+    "totalValue": 40.0
+  }
 ]
 
-
-
-#### **Documentação da API**
-
-
-
-###### **Swagger disponível em:**
-
-
-
-
-
-http://localhost:8080/swagger-ui.html
-
-
-
-#### **Como executar o projeto**
-
-
-
-###### **Clone o repositório:**
-
-
-
-git clone https://github.com/SEU-USUARIO/factory-optimizer-BackEnd.git
-
-
-
-###### **Entre na pasta:** 
-
-
-
-cd factory-optimizer-BackEnd
-
-
-
-###### **Execute a aplicação:**
-
-
-
-./mvnw spring-boot:run
-
-
-
-###### **A aplicação estará disponível em:**
-
-
-
-http://localhost:8080
-
-
-
-
-
-#### **Testes**
-
-
-
-###### **O projeto possui testes unitários para a lógica de planejamento de produção utilizando:**
-
-
-
-* JUnit
-
-
-
-* Mockito
-
-
-
-###### **Executar testes:**
-
-
+🧪 Testes
+O projeto utiliza JUnit 5 e Mockito para garantir a integridade da lógica de planejamento. Para rodar os testes, utilize:
 
 ./mvnw test
 
-
-
-
-
-#### Autor
-
-
-
-##### Projeto desenvolvido por Hugo Avelino de Carvalho.
-
-
-
+👤 Autor
+Desenvolvido por Hugo Avelino de Carvalho.
